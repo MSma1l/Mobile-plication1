@@ -1,5 +1,27 @@
-# Mobile-plication1
+# Driver Assistant
+# 1.	CheckList
+verificare înainte de drum
+•	RCA / ITP
+•	Push-up notification
+•	(Camera)
 
-1. Aplicatie pentru o splatorie cu personal care face poze la date de la bort auto si sa le stockeze,si poze interior si exterior a masinei pentur i caz de probleme sa fie aplicate aceste date 
-2. aplicatie pentru  ajutator pentru soferi care contine date despre masina si sa fie un chech list inainte de pornire 
-3. 
+# 2.	Error
+•	Bord explicații
+•	OBD
+•	(Camera, Bluetooth)
+
+# 3.	Jurnal
+•	Evidența alimentări, reparații etc
+•	Costuri lunare
+•	Camera, GPS
+
+
+# Reminder întreținere
+Predictor problem
+Detectare condus riscant
+Checklist după accident
+Istoric
+
+# Asistent în ce stare auto sub formă de personaj
+
+# React native
