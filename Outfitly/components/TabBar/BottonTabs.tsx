@@ -7,7 +7,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import HomeScreen from '../../SreenPage/HomeScreen';
 import AppScreen from '../../SreenPage/AppScreen';
 import SettingsScreen from '../../SreenPage/SettingsScreen';
-import AddClothesScreen from '../../SreenPage/AddClothesScreen';  
+import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
 
 // Componente 
 import AddButton from '../AddButton';
@@ -45,7 +45,7 @@ export default function BottomTabs() {
         }}
       />
       <Tab.Screen 
-        name="Closet" 
+        name="Wardrobe" 
         component={AppScreen}
         options={{
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="hanger" size={size} color={color} />,

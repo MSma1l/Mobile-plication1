@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabs from '../components/TabBar/BottonTabs';
-import AddClothesScreen from '../SreenPage/AddClothesScreen';
+import AddClothesScreen from '../SreenPage/AddClothesScreen/AddClothesScreen';
 import { RootStackParamList } from '../hooks/useNavigation'; // doar tipurile
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
