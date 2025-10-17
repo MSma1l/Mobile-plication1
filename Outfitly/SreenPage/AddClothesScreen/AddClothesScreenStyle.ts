@@ -1,4 +1,3 @@
-// styles.ts
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -7,7 +6,7 @@ const styles = StyleSheet.create({
   checkboxContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   photoButton: {
     marginTop: 10,
-    backgroundColor: '#a6c3d1ff',
+    backgroundColor: '#379bcdff',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 15,
@@ -15,7 +14,7 @@ const styles = StyleSheet.create({
   photoText: { color: '#fff', fontSize: 16 },
   nextButton: {
     marginTop: 20,
-    backgroundColor: '#e6c3d1ff',
+    backgroundColor: '#ff2e84',
     paddingVertical: 20,
     paddingHorizontal: 40,
     borderRadius: 20,

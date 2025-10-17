@@ -5,9 +5,10 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 // Ecrane
 import HomeScreen from '../../SreenPage/HomeScreen';
+import WardrobeScreen from '../../SreenPage/WardrobeScreen/WardrobeScreen';  
+import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
 import AppScreen from '../../SreenPage/AppScreen';
 import SettingsScreen from '../../SreenPage/SettingsScreen';
-import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
 
 // Componente 
 import AddButton from '../AddButton';
@@ -46,7 +47,7 @@ export default function BottomTabs() {
       />
       <Tab.Screen 
         name="Wardrobe" 
-        component={AppScreen}
+        component={WardrobeScreen}
         options={{
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="hanger" size={size} color={color} />,
         }}
