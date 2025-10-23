@@ -27,18 +27,6 @@ interface RouteParams {
 
 // Date inițiale (de mutat într-un fișier de constante dacă este necesar)
 const initialClothes: ClothesItem[] = [
-  { id: '1', category: 'Dresses', image: 'https://via.placeholder.com/150/0000FF/FFFFFF?text=Rochie' },
-  { id: '2', category: 'Accessories', image: 'https://via.placeholder.com/150/000000/FFFFFF?text=Ochelari' },
-  { id: '3', category: 'Jeans', image: 'https://via.placeholder.com/150/4169E1/FFFFFF?text=Blugi' },
-  { id: '4', category: 'Hats', image: 'https://via.placeholder.com/150/FFD700/000000?text=Palarie' },
-  { id: '5', category: 'T-shirts', image: 'https://via.placeholder.com/150/87CEFA/000000?text=Tricou' },
-  { id: '6', category: 'Dresses', image: 'https://via.placeholder.com/150/FF69B4/FFFFFF?text=Rochie+Roz' },
-  { id: '7', category: 'Jackets', image: 'https://via.placeholder.com/150/3CB371/FFFFFF?text=Vesta' },
-  { id: '8', category: 'Hats', image: 'https://via.placeholder.com/150/2F4F4F/FFFFFF?text=Palarie+Neagra' },
-  { id: '9', category: 'Shirts', image: 'https://via.placeholder.com/150/ADD8E6/000000?text=Camasa+Polo' },
-  { id: '10', category: 'Backpacks', image: 'https://via.placeholder.com/150/FF4500/FFFFFF?text=Rucsac' },
-  { id: '11', category: 'Accessories', image: 'https://via.placeholder.com/150/A0522D/FFFFFF?text=Geanta' },
-  { id: '12', category: 'Shirts', image: 'https://via.placeholder.com/150/000000/FFFFFF?text=Camasa+Neagra' },
 ];
 
 const categories = [
@@ -71,6 +59,7 @@ const WardrobeScreen = () => {
     }
   }, [route.params]);
 
+  
   // Filtrarea hainelor în funcție de categoria selectată
   const filteredClothes = selectedCategory === 'All'
     ? clothes

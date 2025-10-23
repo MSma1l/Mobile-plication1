@@ -1,3 +1,4 @@
+//AddClothesScreen
 import React, { useState } from 'react';
 import { View, Text, Switch, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -88,17 +89,35 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
   const handleNext = () => {
     const selectedCategory = (Object.keys(categories) as Array<keyof typeof categories>)
       .find(cat => categories[cat]);
+  
     if (!selectedCategory || !image) {
       Alert.alert('Error', 'Select a category and add a photo!');
       return;
     }
 
-    navigation.navigate('WardrobeScreen', { newClothes: { category: selectedCategory, image } });
+    const categoryMapping: Record<string, string> = {
+      tshirts: 'T-shirts',
+      shirts: 'Shirts',
+      jeans: 'Jeans',
+      jackets: 'Jackets',
+      dresses: 'Dresses',
+      skirts: 'Skirts',
+      shorts: 'Shorts',
+      hoodies: 'Hoodies',
+    };
 
-    console.log({ category: selectedCategory, image });
-    Alert.alert('Success', 'Clothing item added!');
+    const finalCategory = categoryMapping[selectedCategory] || 'Other';
+
     navigation.goBack();
+    navigation.navigate({
+      name: 'WardrobeScreen',
+      params: { newClothes: { category: finalCategory, image } },
+      merge: true, // combină cu parametrii existenți, nu deschide o nouă instanță
+    });
+
+    Alert.alert('Success', 'Clothing item added!');
   };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

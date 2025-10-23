@@ -1,4 +1,4 @@
-// WardrobeStyles.ts
+// WardrobeScreenStyles.ts
 import { StyleSheet, Dimensions, StatusBar } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20, // Mută padding-ul pe ScrollView
     paddingTop: 5,
-    paddingBottom: 20,
+    paddingBottom: 600,
 
   },
   clothesGrid: {

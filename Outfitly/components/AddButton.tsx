@@ -19,7 +19,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onPress }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 25,
+    bottom: 3,
     alignSelf: 'center',
     zIndex: 10,
   },
