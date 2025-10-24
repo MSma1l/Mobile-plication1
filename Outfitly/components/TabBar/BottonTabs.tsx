@@ -4,7 +4,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 // Ecrane
-import HomeScreen from '../../SreenPage/HomeScreen';
+import HomeScreen from '../../SreenPage/HomeScreen/HomeScreen';
 import WardrobeScreen from '../../SreenPage/WardrobeScreen/WardrobeScreen';  
 import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
 import AppScreen from '../../SreenPage/AppScreen';
