@@ -8,7 +8,7 @@ import HomeScreen from '../../SreenPage/HomeScreen/HomeScreen';
 import WardrobeScreen from '../../SreenPage/WardrobeScreen/WardrobeScreen';  
 import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
 import AppScreen from '../../SreenPage/AppScreen';
-import SettingsScreen from '../../SreenPage/ProfileScreen/SettingsScreen';
+import SettingsScreen from '../../SreenPage/ProfileScreen/settingsPage/SettingsScreen';
 
 // Componente 
 import AddButton from '../AddButton';
