@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './components/AppNavigator'; // corectăm calea
+import AppNavigator from './components/AppNavigator';
 
 export default function App() {
   return (

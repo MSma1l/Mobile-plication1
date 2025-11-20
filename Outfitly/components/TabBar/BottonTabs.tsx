@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, BottomTabBarButtonProps, BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
@@ -9,6 +9,8 @@ import WardrobeScreen from '../../SreenPage/WardrobeScreen/WardrobeScreen';
 import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
 import AppScreen from '../../SreenPage/AppScreen';
 import SettingsScreen from '../../SreenPage/ProfileScreen/settingsPage/SettingsScreen';
+import ProfilePage from '../../SreenPage/ProfileScreen/ProfilePage';
+
 
 // Componente 
 import AddButton from '../AddButton';
@@ -27,7 +29,15 @@ type BottomTabsNavigationProp = NavigationProp<RootStackParamList, 'Tabs'>;
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
-  const navigation = useNavigation<BottomTabsNavigationProp>(); // hook tipat
+  const navigation = useNavigation<BottomTabsNavigationProp>();
+
+  // Tipăm funcția pentru tabBarIcon
+  const renderTabIcon = (
+    IconComponent: typeof Ionicons | typeof MaterialCommunityIcons,
+    name: string
+  ) => ({ color, size }: { color: string; size: number }) => (
+    <IconComponent name={name as any} size={size} color={color} />
+  );
 
   return (
     <Tab.Navigator
@@ -42,14 +52,14 @@ export default function BottomTabs() {
         name="Home" 
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
+          tabBarIcon: renderTabIcon(Ionicons, 'home-outline'),
         }}
       />
       <Tab.Screen 
         name="Wardrobe" 
         component={WardrobeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="hanger" size={size} color={color} />,
+          tabBarIcon: renderTabIcon(MaterialCommunityIcons, 'hanger'),
         }}
       />
       <Tab.Screen 
@@ -57,7 +67,7 @@ export default function BottomTabs() {
         component={HomeScreen} 
         options={{
           tabBarLabel: '',
-          tabBarButton: (props) => (
+          tabBarButton: (props: BottomTabBarButtonProps) => (
             <AddButton
               {...props}
               onPress={() => navigation.navigate('AddClothesScreen')}
@@ -69,14 +79,14 @@ export default function BottomTabs() {
         name="Outfit" 
         component={AppScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="tshirt-crew-outline" size={size} color={color} />,
+          tabBarIcon: renderTabIcon(MaterialCommunityIcons, 'tshirt-crew-outline'),
         }}
       />
       <Tab.Screen 
         name="Profile" 
-        component={SettingsScreen}
+        component={ProfilePage}
         options={{
-          tabBarIcon: ({ color, size }) => <Ionicons name="person-outline" size={size} color={color} />,
+          tabBarIcon: renderTabIcon(Ionicons, 'person-outline'),
         }}
       />
     </Tab.Navigator>

@@ -5,4 +5,6 @@ export type RootStackParamList = {
   AddClothesScreen: undefined;
   AppScreen: undefined;
   SettingsScreen: undefined;
+  FavoritePage: undefined;    // Favorite outfits
+  AboutPage: undefined;       // Help & About
 };
