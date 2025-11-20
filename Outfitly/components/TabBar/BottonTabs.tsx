@@ -7,15 +7,14 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import HomeScreen from '../../SreenPage/HomeScreen/HomeScreen';
 import WardrobeScreen from '../../SreenPage/WardrobeScreen/WardrobeScreen';  
 import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
-import AppScreen from '../../SreenPage/AppScreen';
 import SettingsScreen from '../../SreenPage/ProfileScreen/SettingsScreen';
 
 // Componente 
 import AddButton from '../AddButton';
+import OutfitNavigator from '../../SreenPage/OutfitsScreen/OutfitNavigator'; // importăm stack-ul Outfit
 
 // Stiluri
 import { tabBarStyles } from '../TabBar/TabBarStyle';
-import MyOutfitsScreen from 'SreenPage/OutfitsScreen/MyOutfitsScreen';
 
 // Definim tipurile Stack Navigator părinte
 export type RootStackParamList = {
@@ -28,7 +27,7 @@ type BottomTabsNavigationProp = NavigationProp<RootStackParamList, 'Tabs'>;
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
-  const navigation = useNavigation<BottomTabsNavigationProp>(); // hook tipat
+  const navigation = useNavigation<BottomTabsNavigationProp>();
 
   return (
     <Tab.Navigator
@@ -68,7 +67,7 @@ export default function BottomTabs() {
       />
       <Tab.Screen 
         name="Outfit" 
-        component={MyOutfitsScreen}
+        component={OutfitNavigator} // Aici punem Stack-ul complet
         options={{
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="tshirt-crew-outline" size={size} color={color} />,
         }}

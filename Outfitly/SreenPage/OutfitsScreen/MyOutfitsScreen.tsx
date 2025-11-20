@@ -1,4 +1,3 @@
-// MyOutfitsScreen.tsx
 import React from 'react';
 import {
   View,
@@ -9,24 +8,24 @@ import {
   FlatList,
   Image,
   Dimensions,
-  SafeAreaView,
   StatusBar,
   ListRenderItem,
 } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useMyOutfits } from './MyOutfitsLogic';
 import { Outfit } from './outfitsData';
-import { OutfitStackParamList } from './OutfitNavigator'; // tipurile navigatorului tău
+import { MyOutfitsStackParamList } from './OutfitNavigator'; // tipul Stack Navigatorului
 
-// Screen size for responsive cards
+// Responsive cards
 const { width } = Dimensions.get('window');
 const cardWidth = width / 2 - 24;
 
-// Define navigation prop pentru tipare TypeScript
-type OutfitNavProp = NativeStackNavigationProp<OutfitStackParamList, 'MyOutfits'>;
+// Navigation prop
+type OutfitNavProp = NativeStackNavigationProp<MyOutfitsStackParamList, 'MyOutfits'>;
 
 const MyOutfitsScreen: React.FC = () => {
   const navigation = useNavigation<OutfitNavProp>();
@@ -41,7 +40,6 @@ const MyOutfitsScreen: React.FC = () => {
     toggleLike,
   } = useMyOutfits();
 
-  // Single Outfit Card
   const renderOutfit: ListRenderItem<Outfit> = ({ item }) => (
     <TouchableOpacity
       style={styles.outfitCard}
@@ -59,11 +57,7 @@ const MyOutfitsScreen: React.FC = () => {
         />
       </TouchableOpacity>
 
-      <Image
-        source={item.image}
-        style={styles.singleImage}
-        resizeMode="cover"
-      />
+      <Image source={item.image} style={styles.singleImage} resizeMode="cover" />
     </TouchableOpacity>
   );
 
@@ -73,7 +67,7 @@ const MyOutfitsScreen: React.FC = () => {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>My outfits</Text>
+          <Text style={styles.title}>My Outfits</Text>
           <MaterialCommunityIcons name="signature-freehand" size={28} color="black" />
         </View>
 
@@ -171,7 +165,14 @@ const styles = StyleSheet.create({
 
   singleImage: { width: '100%', height: '100%', borderRadius: 15 },
 
-  generateButton: { backgroundColor: '#EFEFEF', padding: 16, borderRadius: 30, alignItems: 'center', marginHorizontal: 30, marginVertical: 20 },
+  generateButton: {
+    backgroundColor: '#EFEFEF',
+    padding: 16,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginHorizontal: 30,
+    marginVertical: 20,
+  },
   generateButtonText: { fontSize: 16, fontWeight: 'bold', color: '#333' },
 });
 
