@@ -1,11 +1,12 @@
 // ProfilePage.tsx
 
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
 
-import { RootStackParamList } from '../../hooks/useNavigation';
+import { RootStackParamList } from "../../hooks/useNavigation";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -14,6 +15,27 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 
 const ProfilePage: React.FC = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+  const [avatar, setAvatar] = useState("https://randomuser.me/api/portraits/men/75.jpg");
+
+  const pickImage = async () => {
+    // Cere permisiunea pentru galerie
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert("Permisiune necesară", "Avem nevoie de acces la galerie pentru a schimba poza.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -26,13 +48,13 @@ const ProfilePage: React.FC = () => {
       </TouchableOpacity>
 
       {/* Avatar */}
-      <View style={styles.avatarContainer}>
+      <TouchableOpacity style={styles.avatarContainer} onPress={pickImage}>
         <Image
-          source={{ uri: "https://via.placeholder.com/200" }}
+          source={{ uri: avatar }}
           style={styles.avatar}
         />
-        <Text style={styles.name}>Kate</Text>
-      </View>
+      </TouchableOpacity>
+      <Text style={styles.name}>Ford Focus</Text>
 
       {/* Buttons */}
       <View style={styles.buttonsContainer}>
@@ -41,7 +63,7 @@ const ProfilePage: React.FC = () => {
           onPress={() => navigation.navigate("FavoritePage")}
         >
           <Text style={styles.buttonIcon}>❤️</Text>
-          <Text style={styles.buttonText}>Favorite outfits</Text>
+          <Text style={styles.buttonText}>Favorite Outfits</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -65,13 +87,13 @@ const ProfilePage: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  backButton: { marginBottom: 20 },
+  container: { flex: 1, padding: 20, backgroundColor: "#fff", alignItems: "center" },
+  backButton: { alignSelf: "flex-start", marginBottom: 20 },
   backText: { fontSize: 28 },
-  avatarContainer: { alignItems: "center", marginTop: 20 },
-  avatar: { width: 160, height: 160, borderRadius: 20 },
-  name: { fontSize: 28, fontWeight: "600", marginTop: 10 },
-  buttonsContainer: { marginTop: 40 },
+  avatarContainer: { marginTop: 10 },
+  avatar: { width: 160, height: 160, borderRadius: 80, borderWidth: 3, borderColor: "#ccc" },
+  name: { fontSize: 28, fontWeight: "600", marginTop: 10, textAlign: "center" },
+  buttonsContainer: { marginTop: 40, width: "100%" },
   button: {
     flexDirection: "row",
     alignItems: "center",
