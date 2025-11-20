@@ -5,4 +5,5 @@ export type RootStackParamList = {
   AddClothesScreen: undefined;
   AppScreen: undefined;
   SettingsScreen: undefined;
+  Outfits: undefined;
 };

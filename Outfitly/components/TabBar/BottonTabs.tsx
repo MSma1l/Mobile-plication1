@@ -15,6 +15,7 @@ import AddButton from '../AddButton';
 
 // Stiluri
 import { tabBarStyles } from '../TabBar/TabBarStyle';
+import MyOutfitsScreen from 'SreenPage/OutfitsScreen/MyOutfitsScreen';
 
 // Definim tipurile Stack Navigator părinte
 export type RootStackParamList = {
@@ -67,7 +68,7 @@ export default function BottomTabs() {
       />
       <Tab.Screen 
         name="Outfit" 
-        component={AppScreen}
+        component={MyOutfitsScreen}
         options={{
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="tshirt-crew-outline" size={size} color={color} />,
         }}
