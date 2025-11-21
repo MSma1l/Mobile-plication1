@@ -8,9 +8,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <AppNavigator />
-      {/* Daca vrei să folosești OutfitNavigator în loc de AppNavigator,
-          înlocuiește cu <OutfitNavigator /> */}
     </NavigationContainer>
   );
 }
-
