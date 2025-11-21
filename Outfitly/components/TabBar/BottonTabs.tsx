@@ -7,13 +7,18 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import HomeScreen from '../../SreenPage/HomeScreen/HomeScreen';
 import WardrobeScreen from '../../SreenPage/WardrobeScreen/WardrobeScreen';  
 import AddClothesScreen from '../../SreenPage/AddClothesScreen/AddClothesScreen';  
+<<<<<<< HEAD
 import AppScreen from '../../SreenPage/AppScreen';
 import SettingsScreen from '../../SreenPage/ProfileScreen/settingsPage/SettingsScreen';
 import ProfilePage from '../../SreenPage/ProfileScreen/ProfilePage';
 
+=======
+import SettingsScreen from '../../SreenPage/ProfileScreen/SettingsScreen';
+>>>>>>> Outfitle
 
 // Componente 
 import AddButton from '../AddButton';
+import OutfitNavigator from '../../SreenPage/OutfitsScreen/OutfitNavigator'; // importăm stack-ul Outfit
 
 // Stiluri
 import { tabBarStyles } from '../TabBar/TabBarStyle';
@@ -30,6 +35,7 @@ const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
   const navigation = useNavigation<BottomTabsNavigationProp>();
+<<<<<<< HEAD
 
   // Tipăm funcția pentru tabBarIcon
   const renderTabIcon = (
@@ -38,6 +44,8 @@ export default function BottomTabs() {
   ) => ({ color, size }: { color: string; size: number }) => (
     <IconComponent name={name as any} size={size} color={color} />
   );
+=======
+>>>>>>> Outfitle
 
   return (
     <Tab.Navigator
@@ -77,7 +85,7 @@ export default function BottomTabs() {
       />
       <Tab.Screen 
         name="Outfit" 
-        component={AppScreen}
+        component={OutfitNavigator} // Aici punem Stack-ul complet
         options={{
           tabBarIcon: renderTabIcon(MaterialCommunityIcons, 'tshirt-crew-outline'),
         }}
