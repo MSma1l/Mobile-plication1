@@ -94,7 +94,7 @@ const OutfitDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
     <View style={styles.container}>
       {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backText}>Înapoi</Text>
+        <Text style={styles.backText}>←</Text>
       </TouchableOpacity>
 
       <Text style={styles.title}>{outfitId} Collection</Text>
@@ -128,16 +128,16 @@ const OutfitDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#fff' },
-  title: { fontSize: 26, fontWeight: 'bold', marginBottom: 10 },
+  title: { fontSize: 26, fontWeight: 'bold', marginBottom: 30 },
 
-  backButton: {
-    backgroundColor: '#1f6feb',
-    padding: 10,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-    marginBottom: 10,
+  backButton: {  },
+  backText: { 
+    marginTop: 40,
+    marginBottom: 20,
+    color: '#000000ff', 
+    fontWeight: 'bold', 
+    fontSize: 25 
   },
-  backText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
 
   buttonsRow: {
     flexDirection: 'row',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   actionButton: {
-    backgroundColor: '#1f6feb',
+    backgroundColor: '#379bcdff',
     padding: 12,
     borderRadius: 12,
     marginRight: 12,

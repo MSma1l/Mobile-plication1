@@ -1,8 +1,7 @@
-// WardrobeScreenStyles.ts
+//WardrobeScreenStyle.ts
 import { StyleSheet, Dimensions, StatusBar } from 'react-native';
 
 const { width } = Dimensions.get('window');
-// Calculează lățimea unui element din grilă (3 pe rând, cu padding de 20 pe lateral)
 export const ITEM_SIZE = (width - 80) / 3;
 
 export const styles = StyleSheet.create({
@@ -24,23 +23,14 @@ export const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
   },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  locationText: {
-    marginRight: 5,
-    fontSize: 16,
-    color: '#333',
-  },
-  // --- Stiluri Bară Categorii ---
+  logo: { width: 45, height: 45 },
+
   categoryBar: {
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
-    marginBottom: 5,        // reduce spațiul de jos
-
+    marginBottom: 5,        
   },
   categoryButton: {
     paddingHorizontal: 10,
@@ -63,6 +53,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 2, // Subliniază categoria selectată
     borderBottomColor: '#000',
   },
+  
   // --- Stiluri Grilă Haine ---
   mainContentScroll: {
     flex: 1,

@@ -1,3 +1,5 @@
+//AddClothesScreen.tsx
+
 import React, { useState } from 'react';
 import { View, Text, Switch, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -34,21 +36,29 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
     jeans: false,
     jackets: false,
     dresses: false,
-    skirts: false,
     shorts: false,
+    sweaters: false,
     hoodies: false,
+    shoes: false,
+    hats: false,
+    bags: false,
+    accessories: false,
   });
   const [image, setImage] = useState<string | null>(null);
 
   const categoriesList = [
-    { key: 'tshirts', label: 'T-shirts' },
-    { key: 'shirts', label: 'Shirts' },
-    { key: 'jeans', label: 'Jeans' },
-    { key: 'jackets', label: 'Jackets' },
-    { key: 'dresses', label: 'Dresses' },
-    { key: 'skirts', label: 'Skirts' },
-    { key: 'shorts', label: 'Shorts' },
-    { key: 'hoodies', label: 'Hoodies' },
+    { key: 'tshirts', label: 'T-shirts👚' },
+    { key: 'shirts', label: 'Shirts👔' },
+    { key: 'jeans', label: 'Jeans👖' },
+    { key: 'jackets', label: 'Jackets🧥' },
+    { key: 'dresses', label: 'Dresses👗' },
+    { key: 'shorts', label: 'Shorts🩳' },
+    { key: 'sweaters', label: 'Sweaters🧶' },
+    { key: 'hoodies', label: 'Hoodies👕' },
+    { key: 'shoes', label: 'Shoes👟' },
+    { key: 'hats', label: 'Hats🧢' },
+    { key: 'bags', label: 'Backpacks/Bags🎒👜' },
+    { key: 'accessories', label: 'Accessories🕶️' },
   ];
 
   const pickImageFromCamera = async () => {
@@ -82,9 +92,13 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
       jeans: category === 'jeans' ? !prev.jeans : false,
       jackets: category === 'jackets' ? !prev.jackets : false,
       dresses: category === 'dresses' ? !prev.dresses : false,
-      skirts: category === 'skirts' ? !prev.skirts : false,
       shorts: category === 'shorts' ? !prev.shorts : false,
+      sweaters: category === 'sweaters' ? !prev.sweaters : false,
       hoodies: category === 'hoodies' ? !prev.hoodies : false,
+      shoes: category === 'shoes' ? !prev.shoes : false,
+      hats: category === 'hats' ? !prev.hats : false,
+      bags: category === 'bags' ? !prev.bags : false,
+      accessories: category === 'accessories' ? !prev.accessories : false,
     }));
   };
 
@@ -97,15 +111,21 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
     }
 
     const categoryMapping: Record<string, string> = {
-      tshirts: 'T-shirts',
-      shirts: 'Shirts',
-      jeans: 'Jeans',
-      jackets: 'Jackets',
-      dresses: 'Dresses',
-      skirts: 'Skirts',
-      shorts: 'Shorts',
-      hoodies: 'Hoodies',
+      tshirts: 'T-shirts👚',
+      shirts: 'Shirts👔',
+      jeans: 'Jeans👖',
+      jackets: 'Jackets🧥',
+      dresses: 'Dresses👗',
+      shorts: 'Shorts🩳',
+      sweaters: 'Sweaters🧶',
+      hoodies: 'Hoodies👕',
+      shoes: 'Shoes👟',
+      hats: 'Hats🧢',
+      bags: 'Backpacks/Bags🎒👜',
+      accessories: 'Accessories🕶️',
     };
+
+
     const finalCategory = categoryMapping[selectedCategoryKey] || 'Other';
 
     // Salvează poza în AsyncStorage
@@ -139,7 +159,7 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
         {categoriesList.map(cat => (
           <View
             key={cat.key}
-            style={{ width: '33%', flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}
+            style={{ width: '50%', flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}
           >
             <Switch
               value={categories[cat.key as keyof typeof categories]}
@@ -152,7 +172,7 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
         <TouchableOpacity style={[styles.photoButton, { flex: 1, marginRight: 5 }]} onPress={pickImageFromCamera}>
-          <Text style={styles.photoText}>Take Photo</Text>
+          <Text style={styles.photoText}>Take a Photo</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.photoButton, { flex: 1, marginLeft: 5 }]} onPress={pickImageFromGallery}>

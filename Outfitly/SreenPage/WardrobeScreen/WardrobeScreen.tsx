@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,15 +22,18 @@ interface ClothesItem {
 
 const categories = [
   'All',
-  'T-shirts',
-  'Shirts',
-  'Jeans',
-  'Sweaters',
-  'Jackets',
-  'Dresses',
-  'Hats',
-  'Accessories',
-  'Backpacks',
+  'T-shirts👚',
+  'Shirts👔',
+  'Jeans👖',
+  'Jackets🧥',
+  'Dresses👗',
+  'Shorts🩳',
+  'Sweaters🧶',
+  'Hoodies👕',
+  'Shoes👟',
+  'Hats🧢',
+  'Backpacks/Bags🎒👜',
+  'Accessories🕶️',
 ];
 
 const STORAGE_KEY = 'wardrobe_items';
@@ -74,15 +78,33 @@ const WardrobeScreen: React.FC = () => {
       ? clothes
       : clothes.filter(item => item.category === selectedCategory);
 
+      const deletePhoto = async (id: string) => {
+  const updated = clothes.filter(item => item.id !== id);
+  setClothes(updated);
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+};
+
+const handleDelete = (id: string) => {
+  Alert.alert(
+    "Delete item",
+    "Are you sure you want to delete this item?",
+    [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", style: "destructive", onPress: () => deletePhoto(id) }
+    ]
+  );
+};
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.wardrobeTitle}>Wardrobe</Text>
-        <View style={styles.locationContainer}>
-          <Text style={styles.locationText}>Chișinău, 12°C</Text>
-          <Ionicons name="sunny-outline" size={20} color="#000" />
-        </View>
+        <Image 
+          source={require('../../assets/icon.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
       </View>
 
       {/* Categorii */}
@@ -119,13 +141,20 @@ const WardrobeScreen: React.FC = () => {
           <View style={styles.clothesGrid}>
             {filteredClothes.map(item => (
               <View key={item.id} style={styles.clothingItemContainer}>
-                <View style={styles.clothingImageWrapper}>
-                  <Image
-                    source={{ uri: item.image }}
-                    style={styles.clothingImage}
-                    resizeMode="cover"
-                  />
-                </View>
+                <TouchableOpacity
+  key={item.id}
+  onLongPress={() => handleDelete(item.id)}
+  style={styles.clothingItemContainer}
+>
+  <View style={styles.clothingImageWrapper}>
+    <Image
+      source={{ uri: item.image }}
+      style={styles.clothingImage}
+      resizeMode="cover"
+    />
+  </View>
+</TouchableOpacity>
+
               </View>
             ))}
           </View>

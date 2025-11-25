@@ -120,11 +120,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 10,
-    paddingBottom: 10,
   },
-  title: { fontSize: 32, fontWeight: 'bold' },
+  title: { fontSize: 34, fontWeight: 'bold' },
 
-  categoryScrollView: { paddingHorizontal: 16, paddingVertical: 10 },
+  categoryScrollView: { paddingHorizontal: 16},
   categoryButton: { paddingHorizontal: 12, paddingVertical: 6, marginRight: 8, borderRadius: 16 },
   categoryText: { fontSize: 16, color: 'gray', fontWeight: '500' },
   activeCategoryText: { color: 'black', fontWeight: 'bold', borderBottomWidth: 2, borderColor: 'black' },
