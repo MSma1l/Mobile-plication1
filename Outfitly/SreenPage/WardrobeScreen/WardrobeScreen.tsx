@@ -8,26 +8,16 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { styles, ITEM_SIZE } from './WardrobeScreenStyle';
 
-// Importă stilurile dintr-un fișier separat
-import { styles } from './WardrobeScreenStyle'; 
-
-// Definirea tipurilor
 interface ClothesItem {
   id: string;
   category: string;
-  image: string; // URL-ul sau calea locală a imaginii
+  image: string; // URI sau calea locală
 }
-
-interface RouteParams {
-  newClothes?: ClothesItem;
-}
-
-// Date inițiale (de mutat într-un fișier de constante dacă este necesar)
-const initialClothes: ClothesItem[] = [
-];
 
 const categories = [
   'All',
@@ -42,51 +32,47 @@ const categories = [
   'Backpacks',
 ];
 
-const WardrobeScreen = () => {
-  const route = useRoute();
-  const [clothes, setClothes] = useState<ClothesItem[]>(initialClothes);
+const STORAGE_KEY = 'wardrobe_items';
+
+const WardrobeScreen: React.FC = () => {
+  const [clothes, setClothes] = useState<ClothesItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  useEffect(() => {
-    // Logica de adăugare a hainelor noi
-    if (route.params) {
-      const { newClothes } = route.params as RouteParams;
-      if (newClothes) {
-        // Generăm un ID simplu pentru demonstrație
-        const newId = (clothes.length + 1).toString();
-        setClothes(prev => [...prev, { ...newClothes, id: newId }]);
-      }
-    }
-  }, [route.params]);
-
-  
-  // Filtrarea hainelor în funcție de categoria selectată
-  const filteredClothes = selectedCategory === 'All'
-    ? clothes
-    : clothes.filter(item => item.category === selectedCategory);
-
-  // Funcția de randare a articolelor de îmbrăcăminte
-  const renderClothesGrid = () => (
-    <View style={styles.clothesGrid}>
-      {filteredClothes.length === 0 ? (
-        <Text style={styles.noClothesText}>
-          Nu ai adăugat încă haine în categoria "{selectedCategory}".
-        </Text>
-      ) : (
-        filteredClothes.map((item) => (
-          <View key={item.id} style={styles.clothingItemContainer}>
-            <View style={styles.clothingImageWrapper}>
-              <Image
-                source={{ uri: item.image }}
-                style={styles.clothingImage}
-                resizeMode="contain"
-              />
-            </View>
-          </View>
-        ))
-      )}
-    </View>
+  // Load data la focus
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadClothes = async () => {
+        const savedData = await AsyncStorage.getItem(STORAGE_KEY);
+        const items: ClothesItem[] = savedData ? JSON.parse(savedData) : [];
+        console.log('Wardrobe loaded from storage:', items);
+        setClothes(items);
+      };
+      loadClothes();
+    }, [])
   );
+
+  // Functie pentru salvare in storage
+  const saveClothes = async (newClothes: ClothesItem[]) => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newClothes));
+      console.log('Wardrobe saved to storage:', newClothes);
+    } catch (error) {
+      console.log('Error saving wardrobe:', error);
+    }
+  };
+
+  // Functie pentru a adauga poza manual (ex: din AddClothesScreen)
+  const addPhotoToWardrobe = (newPhoto: ClothesItem) => {
+    console.log('Adding new photo:', newPhoto);
+    const updated = [...clothes, newPhoto];
+    setClothes(updated);
+    saveClothes(updated);
+  };
+
+  const filteredClothes =
+    selectedCategory === 'All'
+      ? clothes
+      : clothes.filter(item => item.category === selectedCategory);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -99,7 +85,7 @@ const WardrobeScreen = () => {
         </View>
       </View>
 
-      {/* Secțiunea de Categorii - Scroll Orizontal */}
+      {/* Categorii */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -108,7 +94,7 @@ const WardrobeScreen = () => {
         {categories.map(category => (
           <TouchableOpacity
             key={category}
-            style={styles.categoryButton} // Stilul de bază al butonului
+            style={styles.categoryButton}
             onPress={() => setSelectedCategory(category)}
           >
             <Text
@@ -123,9 +109,27 @@ const WardrobeScreen = () => {
         ))}
       </ScrollView>
 
-      {/* Secțiunea Grilă cu Haine */}
+      {/* Grila de haine */}
       <ScrollView style={styles.mainContentScroll}>
-        {renderClothesGrid()}
+        {filteredClothes.length === 0 ? (
+          <Text style={styles.noClothesText}>
+            Nu ai adăugat încă haine în categoria "{selectedCategory}".
+          </Text>
+        ) : (
+          <View style={styles.clothesGrid}>
+            {filteredClothes.map(item => (
+              <View key={item.id} style={styles.clothingItemContainer}>
+                <View style={styles.clothingImageWrapper}>
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.clothingImage}
+                    resizeMode="cover"
+                  />
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -24,7 +24,7 @@ export const useMyOutfits = (): MyOutfitsLogic => {
   const [likedOutfits, setLikedOutfits] = useState<Set<string>>(new Set());
 
   // List of categories
-  const categories: string[] = ['All', 'Casual', 'Sport', 'Formal', 'Party', 'Travel', 'Seasonal'];
+  const categories: string[] = [''];
 
   // Function to change the selected category
   const selectCategory = (category: string): void => {

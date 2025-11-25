@@ -103,11 +103,6 @@ const MyOutfitsScreen: React.FC = () => {
           numColumns={2}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.outfitsGrid}
-          ListFooterComponent={
-            <TouchableOpacity style={styles.generateButton} onPress={handleGenerate}>
-              <Text style={styles.generateButtonText}>Generate outfits</Text>
-            </TouchableOpacity>
-          }
         />
       </View>
     </SafeAreaView>

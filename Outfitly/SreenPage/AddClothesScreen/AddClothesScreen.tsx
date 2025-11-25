@@ -1,13 +1,13 @@
-//AddClothesScreen
 import React, { useState } from 'react';
 import { View, Text, Switch, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../AddClothesScreen/AddClothesScreenStyle'
 
 type RootStackParamList = {
   AddClothesScreen: undefined;
-  WardrobeScreen: { newClothes: { category: string; image: string } } | undefined;
+  WardrobeScreen: undefined;
 };
 
 type AddClothesScreenNavigationProp = NativeStackNavigationProp<
@@ -18,6 +18,14 @@ type AddClothesScreenNavigationProp = NativeStackNavigationProp<
 interface Props {
   navigation: AddClothesScreenNavigationProp;
 }
+
+interface ClothesItem {
+  id: string;
+  category: string;
+  image: string;
+}
+
+const STORAGE_KEY = 'wardrobe_items';
 
 const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
   const [categories, setCategories] = useState({
@@ -33,14 +41,14 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
   const [image, setImage] = useState<string | null>(null);
 
   const categoriesList = [
-    { key: 'tshirts', label: 'T-shirt' },
-    { key: 'shirts', label: 'Shirt' },
+    { key: 'tshirts', label: 'T-shirts' },
+    { key: 'shirts', label: 'Shirts' },
     { key: 'jeans', label: 'Jeans' },
-    { key: 'jackets', label: 'Jacket' },
-    { key: 'dresses', label: 'Dress' },
-    { key: 'skirts', label: 'Skirt' },
+    { key: 'jackets', label: 'Jackets' },
+    { key: 'dresses', label: 'Dresses' },
+    { key: 'skirts', label: 'Skirts' },
     { key: 'shorts', label: 'Shorts' },
-    { key: 'hoodies', label: 'Hoodie' },
+    { key: 'hoodies', label: 'Hoodies' },
   ];
 
   const pickImageFromCamera = async () => {
@@ -49,10 +57,7 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
       Alert.alert('Permission required', 'Camera permission is needed!');
       return;
     }
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      quality: 1,
-    });
+    const result = await ImagePicker.launchCameraAsync({ allowsEditing: true, quality: 1 });
     if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
@@ -64,10 +69,7 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
       Alert.alert('Permission required', 'Media library permission is needed!');
       return;
     }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 1,
-    });
+    const result = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, quality: 1 });
     if (!result.canceled && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
@@ -86,11 +88,10 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
     }));
   };
 
-  const handleNext = () => {
-    const selectedCategory = (Object.keys(categories) as Array<keyof typeof categories>)
+  const handleNext = async () => {
+    const selectedCategoryKey = (Object.keys(categories) as Array<keyof typeof categories>)
       .find(cat => categories[cat]);
-  
-    if (!selectedCategory || !image) {
+    if (!selectedCategoryKey || !image) {
       Alert.alert('Error', 'Select a category and add a photo!');
       return;
     }
@@ -105,19 +106,29 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
       shorts: 'Shorts',
       hoodies: 'Hoodies',
     };
+    const finalCategory = categoryMapping[selectedCategoryKey] || 'Other';
 
-    const finalCategory = categoryMapping[selectedCategory] || 'Other';
-
-    navigation.goBack();
-    navigation.navigate({
-      name: 'WardrobeScreen',
-      params: { newClothes: { category: finalCategory, image } },
-      merge: true, // combină cu parametrii existenți, nu deschide o nouă instanță
-    });
+    // Salvează poza în AsyncStorage
+    try {
+      const savedData = await AsyncStorage.getItem(STORAGE_KEY);
+      const wardrobeItems: ClothesItem[] = savedData ? JSON.parse(savedData) : [];
+      const newItem: ClothesItem = {
+        id: Date.now().toString(),
+        category: finalCategory,
+        image,
+      };
+      const updatedWardrobe = [...wardrobeItems, newItem];
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedWardrobe));
+      console.log('LOG: New item added to wardrobe:', newItem);
+    } catch (error) {
+      console.log('Error saving wardrobe item:', error);
+      Alert.alert('Error', 'Could not save clothing item.');
+      return;
+    }
 
     Alert.alert('Success', 'Clothing item added!');
+    navigation.goBack();
   };
-
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -141,23 +152,22 @@ const AddClothesScreen: React.FC<Props> = ({ navigation }) => {
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
         <TouchableOpacity style={[styles.photoButton, { flex: 1, marginRight: 5 }]} onPress={pickImageFromCamera}>
-        <Text style={styles.photoText}>Take Photo</Text>
-      </TouchableOpacity>
+          <Text style={styles.photoText}>Take Photo</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.photoButton, { flex: 1, marginLeft: 5 }]} onPress={pickImageFromGallery}>
-        <Text style={styles.photoText}>Choose from Gallery</Text>
+        <TouchableOpacity style={[styles.photoButton, { flex: 1, marginLeft: 5 }]} onPress={pickImageFromGallery}>
+          <Text style={styles.photoText}>Choose from Gallery</Text>
         </TouchableOpacity>
       </View>
 
       {image && (
-      <>
-        <Image source={{ uri: image }} style={{ width: 200, height: 200, marginTop: 10 }} />
-    
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-          <Text style={styles.nextText}>Upload</Text>
-        </TouchableOpacity>
-      </>
-    )}
+        <>
+          <Image source={{ uri: image }} style={{ width: 200, height: 200, marginTop: 10 }} />
+          <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+            <Text style={styles.nextText}>Upload</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </ScrollView>
   );
 };

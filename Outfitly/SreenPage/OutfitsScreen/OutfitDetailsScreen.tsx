@@ -1,38 +1,93 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MyOutfitsStackParamList } from './OutfitNavigator';
+
+type MyOutfitsStackParamList = {
+  OutfitDetails: { outfitId: string };
+};
 
 type Props = NativeStackScreenProps<MyOutfitsStackParamList, 'OutfitDetails'>;
 
+const { width } = Dimensions.get('window');
+
+interface WardrobePhoto {
+  id: string;
+  image: string;
+  category: string;
+}
+
+// Mapping outfit types to wardrobe categories
+const outfitToCategories: Record<string, string[]> = {
+  Party: ['Shirts', 'Dresses', 'Accessories', 'Backpacks', 'Jackets'],
+  Formal: ['Shirts', 'Jackets', 'Pants', 'Accessories'],
+  Classic: ['Shirts', 'Jeans', 'Jackets', 'Shoes'],
+  Sport: ['T-shirts', 'Shorts', 'Hoodies', 'Sneakers'],
+  Summer: ['T-shirts', 'Shorts', 'Dresses', 'Hats'],
+  Casual: ['T-shirts', 'Jeans', 'Sweaters', 'Sneakers', 'Backpacks'],
+};
+
+const STORAGE_KEY = 'wardrobe_items';
+
 const OutfitDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
   const { outfitId } = route.params;
-
-  const [photos, setPhotos] = useState<string[]>([]);
-  const storageKey = `photos_${outfitId}`;
+  const [wardrobePhotos, setWardrobePhotos] = useState<WardrobePhoto[]>([]);
+  const [generatedOutfit, setGeneratedOutfit] = useState<WardrobePhoto[]>([]);
 
   useEffect(() => {
-    loadPhotos();
+    console.log('OutfitDetailsScreen mounted');
+    console.log('Param received from navigation (outfitId):', outfitId);
+    loadWardrobe();
   }, []);
 
-  const loadPhotos = async () => {
-    const saved = await AsyncStorage.getItem(storageKey);
-    if (saved) setPhotos(JSON.parse(saved));
+  const loadWardrobe = async () => {
+    const saved = await AsyncStorage.getItem(STORAGE_KEY);
+    const items: WardrobePhoto[] = saved ? JSON.parse(saved) : [];
+    setWardrobePhotos(items);
+    console.log('Wardrobe loaded from storage:', items);
   };
 
-  const savePhotos = async (newPhotos: string[]) => {
-    await AsyncStorage.setItem(storageKey, JSON.stringify(newPhotos));
-  };
+  const generateOutfit = () => {
+    console.log('--- Generate Outfit ---');
+    console.log('Outfit category received (outfitId):', outfitId);
 
-  const addPhoto = async () => {
-    const result = await ImagePicker.launchCameraAsync({ quality: 0.8 });
-    if (!result.canceled) {
-      const newPhotos = [...photos, result.assets[0].uri];
-      setPhotos(newPhotos);
-      savePhotos(newPhotos);
+    const mappedCategories = outfitToCategories[outfitId];
+    if (!mappedCategories) {
+      console.warn('Categorie outfit invalidă pentru outfitId:', outfitId);
+      return;
     }
+    console.log('Mapped wardrobe categories for this outfit:', mappedCategories);
+
+    const outfitResult: WardrobePhoto[] = [];
+
+    mappedCategories.forEach(cat => {
+      const photosInCategory = wardrobePhotos.filter(p => p.category === cat);
+      if (photosInCategory.length === 0) {
+        console.log(`No photos found for category ${cat}, skipping.`);
+        return;
+      }
+      // Select random photo from category
+      const randomPhoto = photosInCategory[Math.floor(Math.random() * photosInCategory.length)];
+      console.log(`Photo selected for category ${cat}:`, randomPhoto);
+      outfitResult.push(randomPhoto);
+    });
+
+    if (outfitResult.length === 0) {
+      Alert.alert('No photos', 'Nu există poze în categoriile acestui outfit.');
+      return;
+    }
+
+    setGeneratedOutfit(outfitResult);
+    console.log('Final generated outfit photos:', outfitResult);
   };
 
   return (
@@ -42,19 +97,31 @@ const OutfitDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.backText}>Înapoi</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>Your Collection</Text>
+      <Text style={styles.title}>{outfitId} Collection</Text>
 
-      <TouchableOpacity style={styles.addButton} onPress={addPhoto}>
-        <Text style={styles.addText}>Add Photo</Text>
-      </TouchableOpacity>
+      {/* Buttons */}
+      <View style={styles.buttonsRow}>
+        <TouchableOpacity style={styles.actionButton} onPress={generateOutfit}>
+          <Text style={styles.buttonText}>Generate Outfit</Text>
+        </TouchableOpacity>
+      </View>
 
-      <FlatList
-        data={photos}
-        keyExtractor={(item, idx) => idx.toString()}
-        numColumns={2}
-        renderItem={({ item }) => <Image source={{ uri: item }} style={styles.photo} />}
-        contentContainerStyle={{ paddingBottom: 60 }}
-      />
+      {/* Generated Outfit */}
+      {generatedOutfit.length > 0 && (
+        <FlatList
+          data={generatedOutfit}
+          keyExtractor={item => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <View style={styles.generatedContainer}>
+              <Image source={{ uri: item.image }} style={styles.generatedImage} resizeMode="cover" />
+              <Text style={styles.categoryLabel}>{item.category}</Text>
+            </View>
+          )}
+          contentContainerStyle={{ paddingVertical: 16 }}
+        />
+      )}
     </View>
   );
 };
@@ -62,19 +129,7 @@ const OutfitDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#fff' },
   title: { fontSize: 26, fontWeight: 'bold', marginBottom: 10 },
-  addButton: {
-    backgroundColor: '#000',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 20,
-  },
-  addText: { color: '#fff', textAlign: 'center', fontSize: 16 },
-  photo: {
-    width: '48%',
-    height: 180,
-    borderRadius: 12,
-    margin: '1%',
-  },
+
   backButton: {
     backgroundColor: '#1f6feb',
     padding: 10,
@@ -83,6 +138,42 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   backText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+
+  buttonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginBottom: 16,
+  },
+  actionButton: {
+    backgroundColor: '#1f6feb',
+    padding: 12,
+    borderRadius: 12,
+    marginRight: 12,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
+  generatedContainer: {
+    width: width * 0.6,
+    height: width * 0.8,
+    marginRight: 12,
+    borderRadius: 16,
+    overflow: 'hidden',
+    alignItems: 'center',
+  },
+  generatedImage: {
+    width: '100%',
+    height: '85%',
+    borderRadius: 16,
+  },
+  categoryLabel: {
+    marginTop: 4,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
 });
 
 export default OutfitDetailsScreen;
